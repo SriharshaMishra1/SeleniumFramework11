@@ -1,23 +1,51 @@
 package com.vtiger.genericLib;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
+ 
+	import java.io.FileInputStream;
 
-public class FileUtils {
-	
-	public void getPropertyObject() throws IOException
-	{
-		FileInputStream fis=new FileInputStream("./Test Data/CommonData.properties");
-		Properties pObj=new Properties();
-		pObj.load(fis);
-	}
-	
-	public void getExcelData() throws FileNotFoundException
-	{
-		FileInputStream fis=new FileInputStream("./Test Data/TestData.xlsx");
+	import java.io.FileOutputStream;
+	import java.util.Properties;
+
+	import org.apache.poi.ss.usermodel.Sheet;
+	import org.apache.poi.ss.usermodel.Workbook;
+	import org.apache.poi.ss.usermodel.WorkbookFactory;
+    public class FileUtils {
+
 		
-	}
-
-}
+		String filepath="./testData/commondata.properties";
+		String excelpath="./testData/Oldtestdata.xlsx";
+		public Properties getpropertyFileobject() throws Throwable
+		{
+			FileInputStream fis=new FileInputStream(filepath);
+			Properties pobj=new Properties();
+			 pobj.load(fis);
+			return pobj;
+		}
+		public String getExcelData(String sheetName,int rowNum,int CelNum) throws Throwable
+			{
+			
+			FileInputStream fis=new FileInputStream(excelpath);
+					{
+				Workbook wb=WorkbookFactory.create(fis);
+				Sheet sh=wb.getSheet(sheetName);
+				String data=sh.getRow(rowNum).getCell(CelNum).getStringCellValue();
+				wb.close();
+				return data;
+					}
+			}
+				public void SetExcelData(String SheetName,int rowNum,int colNum,String data)throws Throwable
+				{
+				FileInputStream fis=new FileInputStream(excelpath);
+				Workbook wb=WorkbookFactory.create(fis);
+				Sheet sh=wb.getSheet(SheetName);
+				sh.getRow(rowNum).createCell(colNum).setCellValue(data);
+				FileOutputStream fos=new FileOutputStream(excelpath);
+				wb.write(fos);
+				wb.close();
+				
+					}
+				
+					
+		}
+		 
+		 
